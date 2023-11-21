@@ -4,7 +4,7 @@ very simple C++ header-only library to draw ASCII graphics
 
 ## Getting Started
 ```cpp
-#include "ASCII_SCENE.h"
+#include <ASCII_SCENE.h>
 
 int main() {
 	Window window{AlphaDegree::Degree::black};
