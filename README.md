@@ -1,7 +1,7 @@
 # ASCII_SCENE
 very simple C++ header-only library to draw ASCII graphics
 
-[https://github.com/Zuma4/ASCII_SCENE/blob/main/ASCII_PONG_example.gif](example gif)
+[example GIF](https://github.com/Zuma4/ASCII_SCENE/blob/main/ASCII_PONG_example.gif)
 
 
 ## Getting Started
