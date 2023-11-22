@@ -1,6 +1,5 @@
 #pragma once
 #include <iostream>
-#include <string>
 #include <array>
 #include <iostream>
 #include <stdio.h>
@@ -138,7 +137,6 @@ public:
 	{
 		cls();
 		for (int y = 0; y < term_rows; ++y) {
-			m_state[y].resize(term_cols);
 			for (int x = 0; x < term_cols; ++x)
 				m_state[y][x] = m_degree;
 			m_state[y].back() = '\n';
@@ -148,7 +146,7 @@ public:
 	Window(const Window&) = delete;
 
 private:
-	std::array<std::string, term_rows> m_state;
+	std::array<std::array<char, term_cols>, term_rows> m_state;
 	AlphaDegree m_degree;
 };
 
