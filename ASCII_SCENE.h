@@ -4,9 +4,12 @@
 #include <iostream>
 #include <stdio.h>
 #include <windows.h>
+#include <memory>
 
-const int term_rows = 29;
-const int term_cols = 120;
+namespace term {
+	static const int rows = 29;
+	static const int cols = 120;
+};
 
 struct Position
 {
@@ -105,16 +108,17 @@ void cls()
 class Window {
 public:
 
-	Window(const AlphaDegree::Degree& degree = AlphaDegree::Degree::black) : m_degree{ degree }
+	Window(const AlphaDegree::Degree& degree = AlphaDegree::Degree::black, int term_cols = term::cols, int term_rows = term::rows) :
+		m_degree{ degree }, m_term_cols{ term_cols }, m_term_rows{ term_rows }
 	{
 		clear();
 	}
 
 	void display() const
 	{
-		for (int y = 0; y < m_state.size(); ++y) {
-			for (int x = 0; x < m_state[0].size(); ++x)
-				std::cout << m_state[y][x];
+		for (int y = 0; y < m_term_rows; ++y) {
+			for (int x = 0; x < m_term_cols; ++x)
+				std::cout << m_state[m_term_cols * y + x];
 		}
 	}
 
@@ -122,13 +126,13 @@ public:
 	{
 		for (int h = shape.getPosition().y; h < shape.getHeight() + shape.getPosition().y; ++h)
 		{
-			if (h >= m_state.size())
+			if (h >= m_term_rows)
 				break;
 
 			for (int w = shape.getPosition().x; w < shape.getWidth() + shape.getPosition().x; ++w) {
-				if (w >= m_state[0].size())
+				if (w >= m_term_cols)
 					break;
-				m_state[h][w] = shape.getColor();
+				m_state[m_term_cols * h + w] = shape.getColor();
 			}
 		}
 	}
@@ -136,17 +140,20 @@ public:
 	void clear()
 	{
 		cls();
-		for (int y = 0; y < term_rows; ++y) {
-			for (int x = 0; x < term_cols; ++x)
-				m_state[y][x] = m_degree;
-			m_state[y].back() = '\n';
+		for (int y = 0; y < m_term_rows; ++y) {
+			for (int x = 0; x < m_term_cols; ++x)
+				m_state[m_term_cols * y + x] = m_degree;
+			m_state[m_term_cols * y + m_term_cols] = '\n';
 		}
 	};
 
 	Window(const Window&) = delete;
 
 private:
-	std::array<std::array<char, term_cols>, term_rows> m_state;
 	AlphaDegree m_degree;
+	int m_term_cols;
+	int m_term_rows;
+	std::unique_ptr<char[]> manager = std::make_unique<char[]>(m_term_rows * m_term_cols);
+	char* m_state = manager.get();
 };
 
