@@ -1,48 +1,45 @@
-#ifndef ASCII_SCENE
-#define ASCII_SCENE
-
+#pragma once
 #include <iostream>
 #include <array>
+#include <iostream>
+#include <stdio.h>
 #include <windows.h>
 #include <memory>
 
-namespace term { static const int rows = 30; static const int cols = 120; };
-struct Position { int x{}; int y{}; };
 
-void cls()
+namespace asc
+struct Position
 {
-	HANDLE hOut;
-	COORD Position;
-
-	hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-
-	Position.X = 0;
-	Position.Y = 0;
-	SetConsoleCursorPosition(hOut, Position);
-}
+	float x{};
+	float y{};
+	Position() = default;
+	Position(const float x, const float y) : x{ x }, y{ y } {}
+};
 
 class AlphaDegree
 {
 public:
-	enum Degree
+	enum class Degree
 	{
-		black,
-		smooth_black,
-		black_grey,
-		medium_black_grey,
-		smooth_black_grey,
-		low_black_grey,
-		grey,
-		low_white_grey,
-		smooth_white_grey,
-		medium_white_grey,
-		white_grey,
-		smooth_white,
-		white,
+	black,
+	smooth_black,
+	black_grey,
+	medium_black_grey,
+	smooth_black_grey,
+	low_black_grey,
+	grey,
+	low_white_grey,
+	smooth_white_grey,
+	medium_white_grey,
+	white_grey,
+	smooth_white,
+	white,
 	};
 
-	AlphaDegree(const Degree& deg) : m_charDegree{ CharacterDegrees[static_cast<int>(deg)] } {}
+	AlphaDegree(Degree deg) : m_charDegree{ CharacterDegrees[static_cast<int>(deg)] } {}
+
 	operator char() const { return m_charDegree; }
+
 	static std::array<char, 13> CharacterDegrees;
 
 private:
@@ -55,7 +52,7 @@ std::array<char, 13> AlphaDegree::CharacterDegrees{ ' ', '.', ',', '-', '~', ':'
 class Shape
 {
 public:
-	Shape(int width = 0, int height = 0, const Position& position = { 0, 0 }, AlphaDegree::Degree color = AlphaDegree::Degree::white) :
+	Shape(float(width) = 0, float(height) = 0, Position position = { 0, 0 }, AlphaDegree::Degree color = AlphaDegree::Degree::white) :
 		m_width{ width }, m_height{ height }, m_position{ position }, m_degree{ color }
 	{}
 	virtual ~Shape() = default;
@@ -72,46 +69,54 @@ public:
 	void setColor(AlphaDegree::Degree degree) { m_degree = degree; };
 	const Position& getPosition() const { return m_position; };
 	const AlphaDegree& getColor() const { return m_degree; }
-	int getHeight() const { return m_height; };
-	int getWidth() const { return m_width; };
+	float getHeight() const { return m_height; };
+	float getWidth() const { return m_width; };
 
 private:
 	Position m_position;
 	AlphaDegree m_degree;
-	int m_height;
-	int m_width;
-};
-
-class Point
-{
-public:
-	Point(const Position& pos, AlphaDegree::Degree colorDegree) : m_point{ 1, 1, pos, colorDegree } {}
-	void setPosition(const Position& direction) { m_point.setPosition(direction); }
-	void setColor(AlphaDegree::Degree degree) { m_point.setColor(degree); }
-	const Position& getPosition() const { return m_point.getPosition(); }
-	const AlphaDegree& getColor() const { return m_point.getColor(); }
-
-private:
-	Shape m_point;
+	float m_height;
+	float m_width;
 };
 
 bool intersection(const Shape& shape1, const Shape& shape2)
 {
-	int start1_x = shape1.getPosition().x, start1_y = shape1.getPosition().y;
-	int end1_x = start1_x + shape1.getWidth(), end1_y = start1_y + shape1.getHeight();
+	float start1_x = shape1.getPosition().x, start1_y = shape1.getPosition().y;
+	float end1_x = start1_x + shape1.getWidth(), end1_y = start1_y + shape1.getHeight();
 
-	int start2_x = shape2.getPosition().x, start2_y = shape2.getPosition().y;
-	int end2_x = start2_x + shape2.getWidth(), end2_y = start2_y + shape2.getHeight();
+	float start2_x = shape2.getPosition().x, start2_y = shape2.getPosition().y;
+	float end2_x = start2_x + shape2.getWidth(), end2_y = start2_y + shape2.getHeight();
 
 	return((start1_x > start2_x && start1_x < end2_x) || (start2_x > start1_x && start2_x < end1_x)) &&
 		((start1_y > start2_y && start1_y < end2_y) || (start2_y > start1_y && start2_y < end1_y));
 
 }
 
+bool intersection(const Shape& shape, const Position& pos)
+{
+	float start1_x = shape.getPosition().x, start1_y = shape.getPosition().y;
+	float end1_x = start1_x + shape.getWidth(), end1_y = start1_y + shape.getHeight();
+
+	return((pos.x > start1_x && pos.x < end1_x)) && ((pos.y > start1_y && pos.y < end1_y));
+
+}
+
+void cls()
+{
+	HANDLE hOut{};
+	COORD Position{};
+
+	hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	Position.X = 0;
+	Position.Y = 0;
+	SetConsoleCursorPosition(hOut, Position);
+}
+
 class Window {
 public:
 
-	Window(const AlphaDegree::Degree& degree = AlphaDegree::Degree::black, int term_cols = term::cols, int term_rows = term::rows) :
+	Window(int term_cols, int term_rows, const AlphaDegree::Degree& degree = AlphaDegree::Degree::black) :
 		m_degree{ degree }, m_term_cols{ term_cols }, m_term_rows{ term_rows }
 	{
 		clear();
@@ -151,7 +156,6 @@ public:
 	};
 
 	Window(const Window&) = delete;
-	Window& operator=(const Window&) = delete;
 
 private:
 	AlphaDegree m_degree;
@@ -160,5 +164,4 @@ private:
 	std::unique_ptr<char[]> manager = std::make_unique<char[]>(m_term_rows * m_term_cols);
 	char* m_state = manager.get();
 };
-
-#endif
+}
