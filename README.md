@@ -9,6 +9,8 @@ very simple C++ header-only library to draw ASCII graphics
 ```cpp
 #include <ASCII_SCENE.h>
 
+using namespace asc;
+
 int main() {
 	Window window{AlphaDegree::Degree::black};
 	Shape player1{ 4, 10 };
@@ -17,7 +19,7 @@ int main() {
 	player2.setPosition({ term_cols - player2.getWidth(), 0 });
 
 	Shape ball{ 3, 2, {(term_cols / 2) - 2, 3}, AlphaDegree::Degree::white};
-	Position ball_movement = {3, -1};
+	Vector ball_movement = {3, -1};
 
 	Shape bottom{ term_cols, 1, {0, term_rows - 1}, AlphaDegree::Degree::white };
 	Shape top{ term_cols, 1, {0, 0}, AlphaDegree::Degree::white };
