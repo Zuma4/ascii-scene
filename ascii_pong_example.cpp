@@ -1,5 +1,6 @@
 #include <ASCII_SCENE.h>
 
+using namespace asc;
 
 int main() {
 	Window window{AlphaDegree::Degree::black};
