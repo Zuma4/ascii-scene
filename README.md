@@ -1,4 +1,4 @@
-# ASCII_SCENE
+# ascii_scene
 ## !! The Library Is Highly Unstable !! 
 very simple C++ header-only library to draw ASCII graphics
 
