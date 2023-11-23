@@ -6,16 +6,20 @@
 #include <windows.h>
 #include <memory>
 
-namespace term {
-	static const int rows = 30;
-	static const int cols = 120;
-};
+namespace term { static const int rows = 30; static const int cols = 120; };
+struct Position { int x{}; int y{}; };
 
-struct Position
+void cls()
 {
-	int x{};
-	int y{};
-};
+	HANDLE hOut;
+	COORD Position;
+
+	hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	Position.X = 0;
+	Position.Y = 0;
+	SetConsoleCursorPosition(hOut, Position);
+}
 
 class AlphaDegree
 {
@@ -78,6 +82,19 @@ private:
 	int m_width;
 };
 
+class Point
+{
+public:
+	Point(const Position& pos, AlphaDegree::Degree colorDegree) : m_point{ 1, 1, pos, colorDegree } {}
+	void setPosition(const Position& direction) { m_point.setPosition(direction); }
+	void setColor(AlphaDegree::Degree degree) { m_point.setColor(degree); }
+	const Position& getPosition() const { return m_point.getPosition(); }
+	const AlphaDegree& getColor() const { return m_point.getColor(); }
+
+private:
+	Shape m_point;
+};
+
 bool intersection(const Shape& shape1, const Shape& shape2)
 {
 	int start1_x = shape1.getPosition().x, start1_y = shape1.getPosition().y;
@@ -89,18 +106,6 @@ bool intersection(const Shape& shape1, const Shape& shape2)
 	return((start1_x > start2_x && start1_x < end2_x) || (start2_x > start1_x && start2_x < end1_x)) &&
 		((start1_y > start2_y && start1_y < end2_y) || (start2_y > start1_y && start2_y < end1_y));
 
-}
-
-void cls()
-{
-	HANDLE hOut;
-	COORD Position;
-
-	hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-
-	Position.X = 0;
-	Position.Y = 0;
-	SetConsoleCursorPosition(hOut, Position);
 }
 
 class Window {
