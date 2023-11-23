@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ASCII_SCENE
+#define ASCII_SCENE
 #include <iostream>
 #include <array>
 #include <iostream>
@@ -157,3 +158,4 @@ private:
 	char* m_state = manager.get();
 };
 
+#endif
