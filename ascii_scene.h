@@ -3,8 +3,6 @@
 
 #include <iostream>
 #include <array>
-#include <iostream>
-#include <stdio.h>
 #include <windows.h>
 #include <memory>
 
@@ -40,9 +38,7 @@ public:
 	};
 
 	AlphaDegree(Degree deg) : m_charDegree{ CharacterDegrees[static_cast<int>(deg)] } {}
-
 	operator char() const { return m_charDegree; }
-
 	static std::array<char, 13> CharacterDegrees;
 
 private:
@@ -150,6 +146,7 @@ public:
 	};
 
 	Window(const Window&) = delete;
+	Window& operator=(const Window&) = delete;
 
 private:
 	AlphaDegree m_degree;
