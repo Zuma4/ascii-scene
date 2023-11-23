@@ -20,7 +20,7 @@ struct Position
 class AlphaDegree
 {
 public:
-	enum class Degree
+	enum Degree
 	{
 		black,
 		smooth_black,
@@ -37,7 +37,7 @@ public:
 		white,
 	};
 
-	AlphaDegree(Degree deg) : m_charDegree{ CharacterDegrees[static_cast<int>(deg)] } {}
+	AlphaDegree(const Degree& deg) : m_charDegree{ CharacterDegrees[static_cast<int>(deg)] } {}
 	operator char() const { return m_charDegree; }
 	static std::array<char, 13> CharacterDegrees;
 
@@ -51,7 +51,7 @@ std::array<char, 13> AlphaDegree::CharacterDegrees{ ' ', '.', ',', '-', '~', ':'
 class Shape
 {
 public:
-	Shape(int width = 0, int height = 0, Position position = { 0, 0 }, AlphaDegree::Degree color = AlphaDegree::Degree::white) :
+	Shape(int width = 0, int height = 0, const Position& position = { 0, 0 }, AlphaDegree::Degree color = AlphaDegree::Degree::white) :
 		m_width{ width }, m_height{ height }, m_position{ position }, m_degree{ color }
 	{}
 	virtual ~Shape() = default;
