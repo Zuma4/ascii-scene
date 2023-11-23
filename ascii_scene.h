@@ -1,5 +1,6 @@
 #ifndef ASCII_SCENE
 #define ASCII_SCENE
+
 #include <iostream>
 #include <array>
 #include <iostream>
@@ -8,7 +9,7 @@
 #include <memory>
 
 namespace term {
-	static const int rows = 29;
+	static const int rows = 30;
 	static const int cols = 120;
 };
 
