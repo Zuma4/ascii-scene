@@ -10,6 +10,7 @@
 
 
 namespace asc
+{
 struct Position
 {
 	float x{};
