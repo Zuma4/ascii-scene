@@ -19,7 +19,7 @@ int main() {
 	player2.setPosition({ term_cols - player2.getWidth(), 0 });
 
 	Shape ball{ 3, 2, {(term_cols / 2) - 2, 3}, AlphaDegree::Degree::white};
-	Vector ball_movement = {3, -1};
+	Vector2 ball_movement = {3, -1};
 
 	Shape bottom{ term_cols, 1, {0, term_rows - 1}, AlphaDegree::Degree::white };
 	Shape top{ term_cols, 1, {0, 0}, AlphaDegree::Degree::white };
